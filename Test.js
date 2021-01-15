@@ -7,7 +7,7 @@ let TalkBot = true;
 let SongVolume = 1;
 const Queue = new Map();
 const { YTSearcher } = require('ytsearcher');
-const searcher = new YTSearcher({key: "AIzaSyBpKDF14e0FQGaDDVIlj8iL2KOV5sgthDk" ,revealed: true });
+const searcher = new YTSearcher({key: process.env.YTSearcher_Key ,revealed: true });
 //Little bot: first account  : AIzaSyBpKDF14e0FQGaDDVIlj8iL2KOV5sgthDk
 //Little bot: Second account : AIzaSyBB8Xd0AslU6mlf5V0F4Tnd72W7YTFqblQ
 Client.on("ready" , () => {
@@ -1200,5 +1200,5 @@ If you need more Help with a command, type $'the command' Help
 //#endregion
 //=====================================================================================================================================
 //#region Command Bot Key
-Client.login("Nzg3NDg3OTg4ODUwMjI5Mjc4.X9VrVw.cYliZV56aE9oUxCw0kfVCyu19iU");
-//#endregion
+Client.login(process.env.Token);
+//#endregion 
