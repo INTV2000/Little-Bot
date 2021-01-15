@@ -1,0 +1,452 @@
+const Discord = require("discord.js");
+
+const ytdl = require("ytdl-core");
+const { connect } = require("http2");
+const Client = new Discord.Client;
+const prefix = "$";
+const Queue = new Map();
+const {YTSearcher} = require('ytsearcher');
+const { fontcolor } = require("ffmpeg-static");
+const { title } = require("process");
+const { url } = require("inspector");
+const searcher = new YTSearcher({
+    key: "AIzaSyBB8Xd0AslU6mlf5V0F4Tnd72W7YTFqblQ" ,
+    revealed: true 
+})
+
+
+
+Client.on("ready" , () => {
+    console.log("Hello");
+});
+//=====================================================================================================================================
+//=====================================================================================================================================
+//Member add / remove 
+Client.on("guildMemberAdd" , member => {
+    console.log("Someone joined !")
+    member.guild.channels.cache.find(channel => channel.id === "787486069087273004").send("Welcome " + member.displayName);
+});
+Client.on("guildMemberRemove" , member => {
+    console.log("Someone lefted !")
+    member.guild.channels.cache.find(channel => channel.id === "787486069087273004").send("Bye Bye " + member.displayName); 
+});
+//=====================================================================================================================================
+//=====================================================================================================================================
+//Message Ban
+Client.on("message", message => {
+    if(message.author.bot) return;
+    if(message.channel.type == "dm")return;
+
+    if(message.content.startsWith(prefix + "Ban"))
+    {
+        if(message.member.hasPermission("ADMINISTRATOR"))
+        {
+            if(message.content.startsWith(prefix +"Ban Help"))
+            {
+               message.reply(`How to use $Ban ?
+               1- Tap the command $Ban @Target.
+                   The target will be the person you want to ban.
+               2- Tap the @TargetName.
+               3- press enter, if you did a mystake, I'll tell you!
+               `);
+            }
+            else
+            {
+                message.channel.send(message.author.username + ". Your demand has been accepted");
+                let mention = message.mentions.members.first();
+                if(mention == undefined)
+                {
+                    message.reply("The selected target is miss-tap or does not exist")
+                }
+                else
+                {
+                    if(mention.bannable)
+                    {
+                        mention.ban();
+                        message.channel.send(mention.displayName + "as been ban !");
+                    }
+                    else
+                    {
+                        message.channel.send("You have not the possibylity of banning this target");
+                    }
+                }
+            }
+        }
+        else 
+        {
+        message.channel.send(`Sorry ${message.author.username}. But it seems that you don't have privileges' to tap that type of command`); 
+        }
+    }
+});
+//=====================================================================================================================================
+//=====================================================================================================================================
+//Message kick
+Client.on("message", message => {
+    if(message.author.bot) return;
+    if(message.channel.type == "dm")return;
+
+    if(message.content.startsWith(prefix + "Kick"))
+    {
+        if(message.member.hasPermission("ADMINISTRATOR"))
+        {
+            if(message.content.startsWith(prefix +"Kick Help"))
+            {
+               message.reply(`How to use $Kick ?
+               1- Tap the command $Kick @Target
+                   The target will be the person you want to Kick.
+               2- Tap the @TargetName
+               3- press enter, if you did a mystake, I'll tell you!
+               `);
+            }
+            else
+            {
+                message.channel.send(message.author.username + ". Your demand has been accepted");
+                let mention = message.mentions.members.first();
+                if(mention == undefined)
+                {
+                    message.reply("The selected target is miss-tap or does not exist")
+                }
+                else
+                {
+                    if(mention.kickable)
+                    {
+                        mention.kick();
+                        message.channel.send(mention.displayName + " as been Kick !");
+                    }
+                    else
+                    {
+                        message.channel.send("You have not the possibylity of kicking this target");
+                    }
+                } 
+            }
+        }
+        else 
+        {
+        message.channel.send(`Sorry ${message.author.username}. But it seems that you don't have privileges' to tap that type of command`); 
+        }
+    }
+});
+//=====================================================================================================================================
+//=====================================================================================================================================
+//Message Mute
+Client.on("message", message => {
+    if(message.author.bot) return;
+    if(message.channel.type == "dm")return;
+
+    if(message.content.startsWith(prefix + "Mute"))
+    {
+        if(message.member.hasPermission("ADMINISTRATOR"))
+        {
+            if(message.content.startsWith(prefix +"Mute Help"))
+            {
+               message.reply(`How to use $Mute ?
+               1- Tap the command $Mute @Target
+                   The target will be the person you want to Kick.
+               2- Tap the @TargetName
+               3- press enter, if you did a mystake, I'll tell you!
+               `);
+            }
+            else
+            {
+                message.channel.send(message.author.username + ". Your demand has been accepted");
+                let mention = message.mentions.members.first();
+                if(mention == undefined)
+                {
+                    message.reply("The selected target is miss-tap or does not exist");
+                }
+                else
+                {
+                    mention.roles.add("787817446517243934");
+                    message.channel.send(mention.displayName + " as been mute !");
+                }
+            }
+        }
+        else 
+        {
+        message.channel.send(`Sorry ${message.author.username}. But it seems that you don't have privileges' to tap that type of command`); 
+        }
+    }
+});
+//=====================================================================================================================================
+//=====================================================================================================================================
+//Message Unmute
+Client.on("message", message => {
+    if(message.author.bot) return;
+    if(message.channel.type == "dm")return;
+
+    if(message.content.startsWith(prefix + "Unmute"))
+    {
+        if(message.member.hasPermission("ADMINISTRATOR"))
+        {
+            if(message.content.startsWith(prefix +"Unmute Help"))
+            {
+               message.reply(`How to use $Unmute ?
+               1- Tap the command $unmute @Target
+                   The target will be the person you want to Kick.
+               2- Tap the @TargetName
+               3- press enter, if you did a mystake, I'll tell you!
+               `);
+            }
+            else
+            {
+                message.channel.send(message.author.username + ". Your demand has been accepted");
+                let mention = message.mentions.members.first();
+                if(mention == undefined)
+                {
+                    message.reply("The selected target is miss-tap or does not exist");
+                }
+                else
+                {
+                    mention.roles.remove("787817446517243934");
+                    message.channel.send(mention.displayName + " as been Unmute !");
+                }
+            }
+        }
+        else 
+        {
+        message.channel.send(`Sorry ${message.author.username}. But it seems that you don't have privileges' to tap that type of command`); 
+        }
+    }
+});
+//=====================================================================================================================================
+//=====================================================================================================================================
+//Message Hello
+Client.on("message", message => {
+    if(message.author.bot) return;
+    if(message.content == prefix + "Hello"){
+        message.channel.send("Hello " +  message.author.username); 
+    }
+});
+Client.on("message", message => {
+    if(message.author.bot) return;
+    if(message.content == prefix + "hello"){
+        message.channel.send("Hello " +  message.author.username); 
+    }
+});
+Client.on("message", message => {
+        if(message.author.bot) return;
+        if(message.content == prefix + "hi"){
+            message.channel.send("Hello " +  message.author.username); 
+        }
+});
+Client.on("message", message => {
+        if(message.author.bot) return;
+        if(message.content == prefix + "Hi"){
+            message.channel.send("Hello " +  message.author.username); 
+        }
+});
+//=====================================================================================================================================
+//=====================================================================================================================================
+//Message Buzz
+Client.on("message" , message =>{
+if(message.author.bot) return;
+if(message.content == prefix + "Buzz"){
+    message.channel.send("Buzz-Buzz")
+};
+});
+//=====================================================================================================================================
+//=====================================================================================================================================
+//Message Music
+Client.on("message" , message => {
+    if(message.content.startsWith(prefix + "Youtube")){
+        if(message.content.startsWith(prefix +"Youtube Help")){
+           message.reply(`How to use $Youtube ?
+           1- Tap the command $Youtube
+           2- Tap the Link (tap it carfully or copy past)
+           3- press enter, if you did a mystake, I'll tell you!
+           `) ;
+        }else{
+            if(message.member.voice.channel){
+                message.member.voice.channel.join().then(connection => {
+                    let args = message.content.split(" ");
+                    message.delete();
+
+                   if(!args[1]){
+                        message.reply("Link miss-tap or none existing !");
+                        message.channel.send("$Stop");
+                    }
+                    else{
+                        let dispatcher = connection.play(ytdl(args[1], {filter: 'audioonly'}));
+                        message.reply("Now playing")
+                        
+                        dispatcher.on("finish" , () => {
+                            dispatcher.destroy();
+                            connection.disconnect();
+                        });
+
+                        dispatcher.on("error" , err => {
+                        console.log("Erreur : " + err )
+                        });
+                    }
+
+                }).catch(err => {
+                    message.reply("Error as occured ! :" + err);
+                    message.channel.send("$Stop");
+                
+                })
+
+            }
+            else{
+                message.reply("You are not in a voice channel");
+            
+            }
+        }
+    }
+   
+});
+
+Client.on("message", message => {
+    if(message.content.startsWith(prefix + "Youtube")){
+    message.delete();
+    }
+})
+//=====================================================================================================================================
+//=====================================================================================================================================
+//Message Music Developed 
+Client.on("message" , async(message) =>{
+    if(message.content.startsWith(prefix + "Play Help")){
+        message.reply(`How to use $Play ?
+           1- Tap the command $Play
+           2- Tap the thing you want to listen, the program will find the link by himself
+           3- press enter, if you did a mystake, I'll tell you!
+           `) ;
+    }else{
+        const prefix = '$';
+        const ServerQueue = Queue.get(message.guild.id);
+        const args = message.content.slice(prefix.length).trim().split(/ +/g);
+        const command =args.shift().toLocaleLowerCase();
+    
+        switch(command){
+            case 'play':
+                execute(message, ServerQueue);
+                break;
+            case 'stop':
+                stop(message, ServerQueue);
+                break;
+            case 'skip':
+                skip(message, ServerQueue);
+                break;
+        }
+
+
+        async function execute(message, ServerQueue){
+            let vc = message.member.voice.channel;
+            if(!vc){
+                return message.reply("You are not in a voice channel");
+            }
+            else{
+                let result = await searcher.search(args.join(" ") , {type: "video"});
+            
+                const songinfo = await ytdl.getInfo(result.first.url)
+
+                let song = {
+                    title: songinfo.videoDetails.title,
+                    url: songinfo.videoDetails.video_url,
+
+                };
+                if(!ServerQueue){
+                    const queueconstructer = {
+                        txtChannel: message.channel,
+                        vChannel: vc,
+                        connection: null,
+                        songs: [],
+                        volume: 2,
+                        playing: true
+                    };
+                    Queue.set(message.guild.id , queueconstructer);
+
+                    queueconstructer.songs.push(song);
+
+                    try {
+                        let connection = await vc.join();
+                        queueconstructer.connection = connection;
+                        play(message.guild, queueconstructer.songs[0]);
+
+                    }catch(err) {
+                        console.error(err);
+                        Queue.delete(message.guild.id);
+                        return console.log(`Unable to join the voice chat ${err}`);
+
+                    }
+
+                }else{
+                    ServerQueue.songs.push(song);
+                    return message.channel.send("The song has been added !");
+                 
+                }  
+            }
+        }
+        function play(guild, song){
+            const ServerQueue = Queue.get(guild.id);
+            if(!song){
+                ServerQueue.vChannel.leave();
+                Queue.delete(guild.id);
+                return;
+            }
+            const dispatcher = ServerQueue.connection
+            .play(ytdl(song.url))
+            message.reply("Now Playing!")
+            .on("finish" , () =>{
+
+                message.channel.send("$Stop")
+
+                ServerQueue.songs.shift();
+                play(guild, ServerQueue.songs[0]);
+            
+            });
+        }
+        function stop (message, ServerQueue){
+            if(!message.member.voice.channel)
+                return message.channel.send("You need to join the voice chat first !");
+            ServerQueue.songs =[];
+            ServerQueue.connection.dispatcher.end();
+        }
+        function skip (message, ServerQueue){
+            if(!message.member.voice.channel)
+                return message.channel.send("You need to join the voice chat first !");
+            if(!ServerQueue)
+            return message.channel.send("There is nothing to skip!");
+            ServerQueue.connection.dispatcher.end();
+        }
+    }
+});
+//=====================================================================================================================================
+//=====================================================================================================================================
+//Message Stop
+Client.on("message" , message => {
+    
+    if(message.content.startsWith(prefix + "Stop"))
+
+    {
+    if(message.member.voice.channel){
+        message.member.voice.channel.leave();
+        message.channel.send(`I am now disconnected!
+        Have a nice day.`)
+        }
+    }
+});
+
+//=====================================================================================================================================
+//=====================================================================================================================================
+//Message Help
+Client.on("message", message => {
+        if(message.author.bot) return;
+        if(message.content == prefix + "Help"){
+            message.channel.send(`
+            Here's the list of all the commands available at this moment !
+--------------------------------------------------------------------------------------------------------------------------------------------------
+$Ban         (ADMIN ONLY): Ban the desired target                  
+$Kick        (ADMIN ONLY): Kick the desired target                   
+$Mute      (ADMIN ONLY): Mute the desired target             
+$Unmute (ADMIN ONLY): Unmute the desired target       
+$Youtube                              : Play the audio of a link Youtube     
+$Play                                      : Play the audio of something 
+$Stop                                     : Stop the audio of $Youtube
+$Hello                                    : Send you an Hello to boost your day
+$Help                                     : Give you the list of all the commands
+$Buzz                                     : Give you the Buzzzzzzzz
+--------------------------------------------------------------------------------------------------------------------------------------------------
+If you need more Help with a command, type $'the command' Help
+`)}
+}); 
+Client.login("Nzg3NDg3OTg4ODUwMjI5Mjc4.X9VrVw.cYliZV56aE9oUxCw0kfVCyu19iU");

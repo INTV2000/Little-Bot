@@ -1,0 +1,46 @@
+Client.on("message", message => {
+    if(message.author.bot) return
+    if(message.content.startsWith(prefix + "Color Help")){
+        message.reply(`How to use $Color ?
+        1- tap the command $Color
+        2- Tap the color or the number related to the color, use the color available to do so !
+        3- press enter, if you did a mistake, i'll tell you !`);
+        
+    }else if(message.content.startsWith(prefix + "Color " + ("Red" || "Yellow" || "Blue" || "Green" || "Default"))){
+    let args = message.content.split(" ");
+    }else if(message.content.startsWith(prefix + "Color " + ( "1" || "2" || "3" || "4" || "5" || "6" || "7" || "8" || "9" || "10" || "11" || "12" || "13" || "14" || "15" || "16" || "17" || "18" || "19" || "20" || "21" || "22" || "23" || "24" || "25" || "26" || "27"))){
+        let argsNum = message.content.split(" ");
+    
+
+//Reset color: 
+        mention.roles.remove(""); //Red
+        mention.roles.remove(""); //Yellow
+        mention.roles.remove(""); //Blue
+        mention.roles.remove(""); //Green
+//=========================================
+        mention.roles.remove(""); //Default
+//Change color:
+         switch (args[1]){
+         case 'Red':
+            mention.roles.add("");
+         break;
+         case 'Yellow':
+            mention.roles.add("");
+         break;
+         case 'Blue':
+            mention.roles.add("");
+         break;
+         case 'Green':
+            mention.roles.add("");
+         break;
+//=========================================       
+         case 'Default':
+            mention.roles.add("");
+         break;
+         }
+    }else{
+        if(message.content.startsWith(prefix + "Color")){
+        message.reply(": You did not entrer a color, or miss tap it,\n If you want to see all the available color, please tap $Color Help");
+        }  
+    }
+});

@@ -1,0 +1,37 @@
+Client.on("message" , message => {
+    if(message.author.bot)return
+    if(message.content.startsWith(prefix + "Youtube"))
+    {
+    if(message.member.voice.channel){
+        message.member.voice.channel.join().then(connection => 
+        {
+            let args = message.content.split(" ");
+            if(!args[1]){
+                message.reply("Link given is incorrect or not here. ")
+                connection.disconnect();
+            }
+            else
+            {
+                let dispatcher = connection.play(ytdl(args[1]));
+                dispatcher.on("finish"  , () => {
+                    dispatcher.destroy();
+                    connection.disconnect();
+                });
+                dispatcher.on("error" , err =>{
+                    message.reply("Something went wong . . .");
+                    console.log("erreur dans le dispatcher" + err);
+                    
+                })
+            }
+        }).catch(err => 
+            {
+            message.reply("Error in the connection : " + err);
+            connection.disconnect();
+            });
+        }
+        else 
+        {
+        message.reply("You are not connected in the voice channel.");
+        }
+    }
+});

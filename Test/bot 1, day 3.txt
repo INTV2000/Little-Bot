@@ -1,0 +1,258 @@
+const Discord = require("discord.js");
+const { connect } = require("http2");
+const Client = new Discord.Client;
+const prefix = "$"
+Client.on("ready" , () => {
+    console.log("Hello");
+});
+//=====================================================================================================================================
+//=====================================================================================================================================
+//Member add / remove 
+Client.on("guildMemberAdd" , member => {
+    console.log("Someone joined !")
+    member.guild.channels.cache.find(channel => channel.id === "787486069087273004").send("Welcome " + member.displayName);
+});
+Client.on("guildMemberRemove" , member => {
+    console.log("Someone lefted !")
+    member.guild.channels.cache.find(channel => channel.id === "787486069087273004").send("Bye Bye " + member.displayName); 
+});
+//=====================================================================================================================================
+//=====================================================================================================================================
+//Message Ban
+Client.on("message", message => {
+    if(message.author.bot) return;
+    if(message.channel.type == "dm")return;
+
+    if(message.content.startsWith(prefix + "Ban"))
+    {
+        if(message.member.hasPermission("ADMINISTRATOR"))
+        {
+            if(message.content.startsWith(prefix +"Ban Help"))
+            {
+               message.reply(`How to use $Ban ?
+               1- Tap the command $Ban @Target.
+                   The target will be the person you want to ban.
+               2- Tap the @TargetName.
+               3- press enter, if you did a mystake, I'll tell you!
+               `);
+            }
+            else
+            {
+                message.channel.send(message.author.username + ". Your demand has been accepted");
+                let mention = message.mentions.members.first();
+                if(mention == undefined)
+                {
+                    message.reply("The selected target is miss-tap or does not exist")
+                }
+                else
+                {
+                    if(mention.bannable)
+                    {
+                        mention.ban();
+                        message.channel.send(mention.displayName + "as been ban !");
+                    }
+                    else
+                    {
+                        message.channel.send("You have not the possibylity of banning this target");
+                    }
+                }
+            }
+        }
+        else 
+        {
+        message.channel.send(`Sorry ${message.author.username}. But it seems that you don't have privileges' to tap that type of command`); 
+        }
+    }
+});
+//=====================================================================================================================================
+//=====================================================================================================================================
+//Message kick
+Client.on("message", message => {
+    if(message.author.bot) return;
+    if(message.channel.type == "dm")return;
+
+    if(message.content.startsWith(prefix + "Kick"))
+    {
+        if(message.member.hasPermission("ADMINISTRATOR"))
+        {
+            if(message.content.startsWith(prefix +"Kick Help"))
+            {
+               message.reply(`How to use $Kick ?
+               1- Tap the command $Kick @Target
+                   The target will be the person you want to Kick.
+               2- Tap the @TargetName
+               3- press enter, if you did a mystake, I'll tell you!
+               `);
+            }
+            else
+            {
+                message.channel.send(message.author.username + ". Your demand has been accepted");
+                let mention = message.mentions.members.first();
+                if(mention == undefined)
+                {
+                    message.reply("The selected target is miss-tap or does not exist")
+                }
+                else
+                {
+                    if(mention.kickable)
+                    {
+                        mention.kick();
+                        message.channel.send(mention.displayName + " as been Kick !");
+                    }
+                    else
+                    {
+                        message.channel.send("You have not the possibylity of kicking this target");
+                    }
+                } 
+            }
+        }
+        else 
+        {
+        message.channel.send(`Sorry ${message.author.username}. But it seems that you don't have privileges' to tap that type of command`); 
+        }
+    }
+});
+//=====================================================================================================================================
+//=====================================================================================================================================
+//Message Mute
+Client.on("message", message => {
+    if(message.author.bot) return;
+    if(message.channel.type == "dm")return;
+
+    if(message.content.startsWith(prefix + "Mute"))
+    {
+        if(message.member.hasPermission("ADMINISTRATOR"))
+        {
+            if(message.content.startsWith(prefix +"Mute Help"))
+            {
+               message.reply(`How to use $Mute ?
+               1- Tap the command $Mute @Target
+                   The target will be the person you want to Kick.
+               2- Tap the @TargetName
+               3- press enter, if you did a mystake, I'll tell you!
+               `);
+            }
+            else
+            {
+                message.channel.send(message.author.username + ". Your demand has been accepted");
+                let mention = message.mentions.members.first();
+                if(mention == undefined)
+                {
+                    message.reply("The selected target is miss-tap or does not exist");
+                }
+                else
+                {
+                    mention.roles.add("787817446517243934");
+                    message.channel.send(mention.displayName + " as been mute !");
+                }
+            }
+        }
+        else 
+        {
+        message.channel.send(`Sorry ${message.author.username}. But it seems that you don't have privileges' to tap that type of command`); 
+        }
+    }
+});
+//=====================================================================================================================================
+//=====================================================================================================================================
+//Message Unmute
+Client.on("message", message => {
+    if(message.author.bot) return;
+    if(message.channel.type == "dm")return;
+
+    if(message.content.startsWith(prefix + "Unmute"))
+    {
+        if(message.member.hasPermission("ADMINISTRATOR"))
+        {
+            if(message.content.startsWith(prefix +"Unmute Help"))
+            {
+               message.reply(`How to use $Unmute ?
+               1- Tap the command $unmute @Target
+                   The target will be the person you want to Kick.
+               2- Tap the @TargetName
+               3- press enter, if you did a mystake, I'll tell you!
+               `);
+            }
+            else
+            {
+                message.channel.send(message.author.username + ". Your demand has been accepted");
+                let mention = message.mentions.members.first();
+                if(mention == undefined)
+                {
+                    message.reply("The selected target is miss-tap or does not exist");
+                }
+                else
+                {
+                    mention.roles.remove("787817446517243934");
+                    message.channel.send(mention.displayName + " as been Unmute !");
+                }
+            }
+        }
+        else 
+        {
+        message.channel.send(`Sorry ${message.author.username}. But it seems that you don't have privileges' to tap that type of command`); 
+        }
+    }
+});
+//=====================================================================================================================================
+//=====================================================================================================================================
+//Message Hello
+Client.on("message", message => {
+    if(message.author.bot) return;
+    if(message.content == prefix + "Hello"){
+        message.channel.send("Hello " +  message.author.username); 
+    }
+});
+Client.on("message", message => {
+    if(message.author.bot) return;
+    if(message.content == prefix + "hello"){
+        message.channel.send("Hello " +  message.author.username); 
+    }
+});
+Client.on("message", message => {
+        if(message.author.bot) return;
+        if(message.content == prefix + "hi"){
+            message.channel.send("Hello " +  message.author.username); 
+        }
+});
+Client.on("message", message => {
+        if(message.author.bot) return;
+        if(message.content == prefix + "Hi"){
+            message.channel.send("Hello " +  message.author.username); 
+        }
+});
+//=====================================================================================================================================
+//=====================================================================================================================================
+//Message Buzz
+Client.on("message" , message =>{
+if(message.author.bot) return;
+if(message.content == prefix + "Buzz"){
+    message.reply("Buzz-Buzz")
+};
+});
+//=====================================================================================================================================
+//=====================================================================================================================================
+//Message Music
+
+//=====================================================================================================================================
+//=====================================================================================================================================
+//Message Help
+Client.on("message", message => {
+        if(message.author.bot) return;
+        if(message.content == prefix + "Help"){
+            message.channel.send(`
+            Here's the list of all the commands available at this moment !
+--------------------------------------------------------------------------------------------------------------------------------------------------
+$Ban         (ADMIN ONLY): Ban the desired target                  
+$Kick        (ADMIN ONLY): Kick the desired target                   
+$Mute      (ADMIN ONLY): Mute the desired target             
+$Unmute (ADMIN ONLY): Unmute the desired target            
+$Youtube                              : Play the audio of the youtube link
+$Hello                                    : Send you an Hello to boost your day
+$Help                                     : Give you the list of all the commands
+$Buzz                                     : Give you the Buzzzzzzzz
+--------------------------------------------------------------------------------------------------------------------------------------------------
+If you need more Help with a command, type $'the command' Help
+`)}
+}); 
+Client.login("This is where i put the bot ID, it is not here now for the protection of my bot");

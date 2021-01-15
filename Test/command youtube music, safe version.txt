@@ -1,0 +1,61 @@
+Client.on("message" , message => {
+    if(message.content.startsWith(prefix + "Youtube")){
+        if(message.member.voice.channel){
+            message.member.voice.channel.join().then(connection => {
+                let args = message.content.split(" ");
+                message.delete();
+
+                if(!args[1]){
+                    message.reply("Link miss-tap or none existing !");
+                    message.channel.send("$Stop");
+                }
+                else{
+                    let dispatcher = connection.play(ytdl(args[1], {filter: 'audioonly'}));
+                    message.reply("Now playing")
+
+                    dispatcher.on("finish" , () => {
+                        dispatcher.destroy();
+                        connection.disconnect();
+                    });
+
+                    dispatcher.on("error" , err => {
+                    console.log("Erreur : " + err )
+                    });
+                }
+
+            }).catch(err => {
+                message.reply("Error as occured ! :" + err);
+                message.channel.send("$Stop");
+                
+            })
+
+        }
+        else{
+            message.reply("You are not in a voice channel");
+            
+        }
+    }
+   
+});
+
+Client.on("message", message => {
+    if(message.content.startsWith(prefix + "Youtube")){
+    message.delete();
+    }
+})
+
+//=====================================================================================================================================
+//=====================================================================================================================================
+//Message Stop
+Client.on("message" , message => {
+    
+    if(message.content.startsWith(prefix + "Stop"))
+
+    {
+    if(message.member.voice.channel){
+        message.member.voice.channel.leave();
+        message.channel.send(`I am now disconnected!
+        Have a nice day.`)
+        }
+    }
+});
